@@ -1,6 +1,6 @@
 # readme
 
-This repository has a docker-compose files that allows you to create and delete Kubernetes cluster with 3 t3.small nodes autoscaled between 3 and 7. It contains a docker-compose to start spark jobs on the cluster.
+This repository has a docker-compose files that allows you to create and delete Kubernetes cluster with 3 t3.small nodes. It contains a docker-compose to start spark jobs on the cluster.
 You should have docker and docker-compose installed in your environment
 
 
@@ -44,7 +44,7 @@ and execute :
 
 To run a spark job go to :
 ```
- spark-job/
+ spark-job/spark-creator
 ```
 and execute :
 ```
