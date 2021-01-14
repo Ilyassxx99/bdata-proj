@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+#Spark job initiator
+  spark:
+    image: ilyassifez/bdataprojectpython:sparky
+    container_name: spark
+    volumes:
+      - stack-creator_mykubeconfig:/root/.kube
+    command: ["python3","main.py"]
+    environment:
+      ACCESS_KEY: $ACCESS_KEY
+      SECRET_KEY: $SECRET_KEY
+      REGION: $REGION
+#Volumes
+volumes:
+  stack-creator_mykubeconfig:
+    external: true

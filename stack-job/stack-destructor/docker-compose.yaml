@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+#AWS CloudFormation Stack creator
+  stack:
+    image: ilyassifez/bdataprojectpython:stacky
+    container_name: stack-destructor
+    network_mode: "host"
+    command: ["python3","main.py","1"]
+    environment:
+      ACCESS_KEY: $ACCESS_KEY
+      SECRET_KEY: $SECRET_KEY
+      REGION: $REGION
