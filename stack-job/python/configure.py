@@ -59,7 +59,11 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
              sudo cp -i /etc/kubernetes/admin.conf /home/ubuntu/.kube/config && \
              sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
              sudo mkdir /data/ && \
-             sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml'
+             sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml && \
+             sudo chown ubuntu:ubuntu /home/ubuntu/data/spark && \
+             sudo echo "/home/ubuntu/data/spark 192.168.0.0/16(rw,sync,no_root_squash,no_subtree_check)" >> /etc/exports && \
+             sudo exportfs -a && \
+             sudo service nfs-kernel-server start'
             stdin,stdout,stderr=ssh_client.exec_command(cmd)
             lines = stdout.readlines() # read output of command
             subprocess.call("./create-admin.sh",shell=True)
@@ -101,6 +105,9 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             stdin,stdout,stderr=ssh_client.exec_command('chmod +x result.sh')
             lines = stdout.readlines()
             stdin,stdout,stderr=ssh_client.exec_command("sudo service docker start")
+            lines = stdout.readlines()
+            nfs_cmd = "sudo mount "+controllersPrivateIp[0]+":/home/ubuntu/data/spark /home/ubuntu/data/spark"
+            stdin,stdout,stderr=ssh_client.exec_command(nfs_cmd)
             lines = stdout.readlines()
             stdin,stdout,stderr=ssh_client.exec_command(joincmd) # Command to join cluster
             lines = stderr.readlines()

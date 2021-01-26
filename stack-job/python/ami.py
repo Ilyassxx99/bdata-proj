@@ -146,8 +146,8 @@ def delete_ec2_instance(instanceId,client):
     )
     print(instanceId + " terminated !")
 
-def delete_ami(amiId,amiName,client):
-    ownerId = boto3.client('sts').get_caller_identity().get('Account')
+def delete_ami(amiId,amiName,client,sts):
+    ownerId = sts.get_caller_identity().get('Account')
     response = client.deregister_image(
     ImageId=amiId,
     )
