@@ -11,7 +11,7 @@ bin/spark-submit \
 --conf spark.executor.instances=2 \
 --conf spark.kubernetes.driver.request.cores=1 \
 --conf spark.kubernetes.executor.request.cores=1 \
---conf spark.kubernetes.container.image=ilyassifez/spark:testy \
+--conf spark.kubernetes.container.image=ilyassifez/spark:testy \ #***
 --conf spark.kubernetes.container.image.pullPolicy=Always \
 --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
 --conf spark.eventLog.enabled=true \
