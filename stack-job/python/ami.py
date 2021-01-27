@@ -71,7 +71,6 @@ def setup_instance(instanceIp):
      sudo swapoff –a'
     )
     lines = stdout.readlines()
-    print(lines)
     # stdin, stdout, stderr = ssh_client.exec_command(
     #     'sudo apt install openjdk-8-jdk -y && \
     #      echo "export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:jre/bin/java::")" >> .bashrc'
