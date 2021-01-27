@@ -60,7 +60,6 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
              sudo chown $(id -u):$(id -g) /home/ubuntu/.kube/config && \
              sudo mkdir /data/ && \
              sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml && \
-             sudo chown ubuntu:ubuntu /home/ubuntu/data/spark && \
              sudo echo "/home/ubuntu/data/spark 192.168.0.0/16(rw,sync,no_root_squash,no_subtree_check)" >> /etc/exports && \
              sudo exportfs -a && \
              sudo service nfs-kernel-server start'
