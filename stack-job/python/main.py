@@ -30,7 +30,7 @@ if __name__ == '__main__':
         }
     )
 
-    accId = boto3.client('sts',
+    accId = boto3.client("sts",
     aws_access_key_id=ACCESS_KEY,
     aws_secret_access_key=SECRET_KEY,
     config=my_config).get_caller_identity().get('Account')
