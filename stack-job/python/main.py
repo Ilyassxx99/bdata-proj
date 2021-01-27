@@ -137,6 +137,8 @@ if __name__ == '__main__':
             os.environ['AMI_ID'] = amiId
             create_key_pair(client)
             subprocess.call("sed -i 's/myami/'$AMI_ID'/' stackTemp.yaml", shell=True)
+            subprocess.call('echo "---------------------------------------------"' , shell=True)
+            subprocess.call("cat stackTemp.yaml", shell=True)
             create_cloudformation_stack("All-in-One","stackTemp.yaml",cloudformation)
             configure(client,ec2,autoscaling,ssh_client,cloudformation)
             monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
