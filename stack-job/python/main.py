@@ -78,11 +78,6 @@ if __name__ == '__main__':
     aws_secret_access_key=SECRET_KEY,
     config=my_config
     )
-    sts = iam = boto3.client("sts",
-    aws_access_key_id=ACCESS_KEY,
-    aws_secret_access_key=SECRET_KEY,
-    config=my_config
-    )
     logs = boto3.client("logs",
     aws_access_key_id=ACCESS_KEY,
     aws_secret_access_key=SECRET_KEY,
@@ -156,5 +151,5 @@ if __name__ == '__main__':
         amiName = amis[0]["Name"]
         delete_cloudformation_stack(ec2,client,"All-in-One",cloudformation)
         delete_key_pair(client)
-        delete_ami(amiId,amiName,client,sts)
+        delete_ami(amiId,amiName,client,accId)
         monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
