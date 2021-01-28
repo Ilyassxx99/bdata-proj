@@ -1,6 +1,7 @@
 import boto3
 import paramiko
 import os
+import subprocess
 from stack import create_cloudformation_stack,delete_cloudformation_stack
 from keypair import create_key_pair,delete_key_pair
 
