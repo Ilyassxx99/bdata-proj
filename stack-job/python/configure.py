@@ -26,7 +26,6 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
     controllers = client.describe_instances(Filters=[{'Name': 'tag:Type', 'Values': ['Controller']},{'Name': 'instance-state-name', 'Values': ['running']}])
     workers = client.describe_instances(Filters=[{'Name': 'tag:Type', 'Values': ['Worker']},{'Name': 'instance-state-name', 'Values': ['running']}])
     subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     for reservation in controllers["Reservations"]:
         for instance in reservation["Instances"]:
             controllersIp.append(instance["PublicIpAddress"]) # Get controller Ip address
@@ -78,7 +77,7 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             controllersCount = controllersCount + 1
             joincmd = lines[0][:-2]
             joincmd = "sudo "+ joincmd # The join command to enter in controllers to join cluster
-    subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
+
     for reservation in workers["Reservations"]:
         for instance in reservation["Instances"]:
             stdo = ""
@@ -115,7 +114,6 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             # print(stdo)
             workersCount = workersCount + 1
     subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
-    subprocess.call("echo --------------------------------",shell=True)
     subprocess.call('echo "Deploying the kubernetes objects ..."',shell=True)
     subprocess.call("kubectl apply -f /scripts/k8s",shell=True)
     subprocess.call("kubectl label nodes worker-node-0 spark=yes",shell=True)
@@ -125,6 +123,7 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
                     --namespace kube-system \
                     --install kube-opex-analytics \
                     /scripts/helm/kube-opex-analytics/', shell=True)
+    subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
     print("--------------------------------")
     print("Access Kube-Opex-Analytics on: "+workersIp[0]+":31082")
     print("--------------------------------")

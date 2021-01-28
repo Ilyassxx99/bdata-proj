@@ -15,13 +15,9 @@ def get_stack_network_info(stack,cloudformation):
             securityGroupSsh = output["OutputValue"]
         if output["OutputKey"] == "PublicSubnet01Id":
             subnetId = output["OutputValue"]
-    print("Subnet Id is: " + str(subnetId))
-    print("SecurityGroupSsh Id is: " + str(securityGroupSsh))
-    print("SecurityGroup Id is: " + str(securityGroup))
     return (securityGroup,securityGroupSsh,subnetId)
 
 def create_ec2_instance(securityGroup,securityGroupSsh,subnetId,client,ec2):
-    print("Creating EC2 instance ...")
     instance = client.run_instances(
         ImageId="ami-089d839e690b09b28",
         MinCount=1,
@@ -36,7 +32,7 @@ def create_ec2_instance(securityGroup,securityGroupSsh,subnetId,client,ec2):
     )
     instanceId = instance["Instances"][0]["InstanceId"]
     instance = ec2.Instance(instanceId)
-    print("Waiting for instance to start ...")
+    subprocess.call('echo "Waiting for instance to start ..."',shell=True)
     waiter = client.get_waiter("instance_status_ok")
     waiter.wait(
         InstanceIds=[
@@ -45,12 +41,10 @@ def create_ec2_instance(securityGroup,securityGroupSsh,subnetId,client,ec2):
         WaiterConfig={"Delay": 30, "MaxAttempts": 123},
     )
     instanceIp = instance.public_ip_address
-    print("Instance Ip: " + str(instanceIp))
-    print("Instance started !")
     return (instanceIp,instanceId)
 
 def setup_instance(instanceIp):
-    print("Installing required software ...")
+
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     k = paramiko.RSAKey.from_private_key_file(r"/root/.kube/project-key.pem")
@@ -112,12 +106,11 @@ def setup_instance(instanceIp):
     lines = stdout.readlines()
     ssh_client.close()
 def create_ami(instanceId,ec2,client,ssm):
-    print("Creating AMI ...")
     instance = ec2.Instance(instanceId)
     ami = instance.create_image(
         Description="AMI for big data project",
         InstanceId=instanceId,
-        Name="kubernetes-optimizied-ami",
+        Name="kubernetes-optimized-ami",
     )
     amiId = ami.image_id
     amiName = ami.name
@@ -133,11 +126,9 @@ def create_ami(instanceId,ec2,client,ssm):
         Type='String',
         Overwrite=True,
     )
-    print(amiName + " created successfully ")
     return (amiId, amiName)
 
 def delete_ec2_instance(instanceId,client):
-    print("Terminating the EC2 instance: "+ instanceId +" ...")
     terminate = client.terminate_instances(
         InstanceIds=[
             instanceId,
@@ -149,7 +140,6 @@ def delete_ec2_instance(instanceId,client):
             instanceId,
             ]
     )
-    print(instanceId + " terminated !")
 
 def delete_ami(amiId,client,accId,ssm):
 #  ownerId = sts.get_caller_identity().get('Account')

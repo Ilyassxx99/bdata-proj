@@ -3,7 +3,6 @@ import sys
 
 def create_cloudformation_stack(stack,file,cloudformation):
     cf_template = open(file).read()
-    print("Creating stack: "+stack+"...")
     response = cloudformation.create_stack(
         StackName=stack,
         TemplateBody=cf_template,
@@ -14,10 +13,9 @@ def create_cloudformation_stack(stack,file,cloudformation):
     )
     waiter = cloudformation.get_waiter("stack_create_complete")
     waiter.wait(StackName=stack, WaiterConfig={"Delay": 15, "MaxAttempts": 300})
-    print(stack+" created successfully !")
+
 
 def delete_cloudformation_stack(ec2,client,stack,cloudformation):
-    print("Deleting stack only (AMI and corresponding snapshot must be deleted manually !) ...")
     controllerReserv = client.describe_instances(
         Filters=[
         {
@@ -48,4 +46,3 @@ def delete_cloudformation_stack(ec2,client,stack,cloudformation):
     )
     waiter = cloudformation.get_waiter("stack_delete_complete")
     waiter.wait(StackName=stack, WaiterConfig={"Delay": 15, "MaxAttempts": 300})
-    print(stack + " stack deleted successfully !")
