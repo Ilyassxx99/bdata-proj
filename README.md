@@ -6,11 +6,9 @@ You should have docker and docker-compose installed in your environment
 
 ## Prepare the environment
 
-To successfully create the cluster, please enter your AWS user's Access_key and Secret_key (with the right permissions to use AWS resources), and the region where to create the resources, in the .env file located in :
+To successfully create the cluster, please enter your AWS user's Access_key and Secret_key (with the right permissions to use AWS resources), and the region where to create the resources, in the env file located in :
 ```
-- stack-job/stack-creator/.env
-- stack-job/stack-destructor/.env
-- spark-job/spark-creator/.env
+scripts
 ```
 Th .env file should look like this :
 ```
@@ -24,29 +22,20 @@ REGION=<Your region>
 
 To create the AWS stack go to :
 ```
- stack-job/stack-creator
+ ./stack.sh
 ```
-and execute :
-```
- docker-compose up
-```
+it sets the environment variables and executes docker-compose.
 ### Delete Stack
 
 To delete the AWS stack go to :
 ```
- stack-job/stack-destructor
+ ./delete.sh
 ```
-and execute :
-```
- docker-compose up
-```
+
 ### Run Spark job
 
 To run a spark job go to :
 ```
- spark-job/spark-creator
+ ./spark.sh
 ```
-and execute :
-```
- docker-compose up
-```
+
