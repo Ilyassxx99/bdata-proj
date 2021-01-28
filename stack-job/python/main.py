@@ -155,9 +155,10 @@ if __name__ == '__main__':
         monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
     else:
         print("Deleting All ...")
-        amiId = amis[0]["ImageId"]
-        amiName = amis[0]["Name"]
+        amiId = ssm.get_parameter(
+            Name='AMI-ID',
+        )
         delete_cloudformation_stack(ec2,client,"All-in-One",cloudformation)
         delete_key_pair(client)
-        delete_ami(amiId,amiName,client,accId,ssm)
+        delete_ami(amiId,client,accId,ssm)
         monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
