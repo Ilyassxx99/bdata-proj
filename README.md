@@ -10,11 +10,16 @@ To successfully create the cluster, please enter your AWS user's Access_key and 
 ```
 scripts
 ```
-Th .env file should look like this :
+The env file should look like this :
 ```
 ACCESS_KEY=<Your access key>
 SECRET_KEY=<Your secret key>
 REGION=<Your region>
+```
+Then execute the following command, to make all the scripts executable :
+```
+chmod +x perm.sh
+./perm.sh
 ```
 ## Running the containers
 
@@ -25,6 +30,18 @@ To create the AWS stack go to :
  ./stack.sh
 ```
 it sets the environment variables and executes docker-compose.
+Then execute the following to get the key-pair used for SSH to the cluster:
+```
+ ./key-1.sh
+```
+Open a new terminal, go to scripts folder and execute :
+```
+ ./key-2.sh
+```
+Then get the Controller Ip address from the output of ./stack.sh and execute :
+```
+ ./ssh.sh <Ip @ of Controller>
+```
 ### Delete Stack
 
 To delete the AWS stack go to :
