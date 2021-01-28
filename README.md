@@ -10,11 +10,16 @@ To successfully create the cluster, please enter your AWS user's Access_key and 
 ```
 scripts
 ```
-Th .env file should look like this :
+The env file should look like this :
 ```
 ACCESS_KEY=<Your access key>
 SECRET_KEY=<Your secret key>
 REGION=<Your region>
+```
+Then execute the following command, to make all the scripts executable :
+```
+chmod +x perm.sh
+./perm.sh
 ```
 ## Running the containers
 
