@@ -136,7 +136,7 @@ if __name__ == '__main__':
             amiName = amis[0]["Name"]
             os.environ['AMI_ID'] = amiId
             create_key_pair(client)
-            subprocess.call("sed -i 's/myami/'$AMI_ID'/' stackTemp.yaml", shell=True)
+            subprocess.call("sed -i 's/myami/ami-018e5e3bb71153dbe/' stackTemp.yaml", shell=True)
             subprocess.call('echo "---------------------------------------------"' , shell=True)
             subprocess.call("cat stackTemp.yaml", shell=True)
             create_cloudformation_stack("All-in-One","stackTemp.yaml",cloudformation)
