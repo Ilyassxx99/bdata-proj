@@ -6,32 +6,34 @@ from botocore.config import Config
 
 
 my_config = Config(
-    region_name = REGION,
+    region_name = "eu-west-3",
     retries = {
         'max_attempts': 10,
         'mode': 'standard'
     }
 )
 
-ssm = boto3.client('ssm',
-    aws_access_key_id=ACCESS_KEY,
-    aws_secret_access_key=SECRET_KEY,
+cfd = boto3.client('cloudformation',
+    aws_access_key_id="AKIATJB6EADH4SQKDFEV",
+    aws_secret_access_key="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",
     config=my_config
     )
 
-response = ssm.put_parameter(
-    Name='AMI-ID',
-    Value='sdqzdqxw<c',
-    Type='String',
-    Overwrite=True,
+response = cfd.list_stacks(
+StackStatusFilter=[
+        'CREATE_COMPLETE',
+        'CREATE_IN_PROGRESS'
+    ]
 )
+stacks =[]
+print(response)
+for i in range(len(response["StackSummaries"])):
+    stacks.append(response["StackSummaries"][i]["StackName"])
+print(stacks)
+print(len(response["StackSummaries"]))
+if len(response["StackSummaries"]) == 0:
+    print("Empty")
+else:
+    print("Not Empty")
 
-amiId = ssm.get_parameter(
-    Name='AMI-ID',
-)
-
-print(result["Parameter"]["Value"])
-
-deleteAmi = ssm.delete_parameter(
-    Name='AMI-ID'
-)
+print(not True)

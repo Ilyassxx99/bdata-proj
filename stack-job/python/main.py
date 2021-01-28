@@ -121,6 +121,8 @@ if __name__ == '__main__':
             subprocess.call('echo "AMI doesnt exist, creating AMI ..."',shell=True)
             subprocess.call('echo "-------------------------"',shell=True)
             subprocess.call('echo "Creating VPC-AMI Cloudformation Stack ..."',shell=True)
+            if cloudformation_stack_exists("VPC-AMI",cloudformation):
+                delete_cloudformation_stack(ec2,client,"VPC-AMI",cloudformation)
             create_cloudformation_stack("VPC-AMI","vpc.yaml",cloudformation)
             securityGroup,securityGroupSsh,subnetId = get_stack_network_info("VPC-AMI",cloudformation)
             create_key_pair(client)
@@ -148,7 +150,7 @@ if __name__ == '__main__':
             subprocess.call('echo "-------------------------"',shell=True)
             subprocess.call('echo "Configuring Kubernetes Cluster Nodes ..."',shell=True)
             configure(client,ec2,autoscaling,ssh_client,cloudformation)
-            monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
+            #monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
             subprocess.call('echo "Kubernetes Cluster Nodes Configured Successfully !"',shell=True)
         else :
             subprocess.call('echo "Image exists, creating cluster ..."',shell=True)
@@ -166,7 +168,7 @@ if __name__ == '__main__':
             subprocess.call('echo "---------------------------------------------"' , shell=True)
             subprocess.call('echo "Configuring Kubernetes Cluster Nodes ..."',shell=True)
             configure(client,ec2,autoscaling,ssh_client,cloudformation)
-            monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
+            #monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
             subprocess.call('echo "Kubernetes Cluster Nodes Configured Successfully !"',shell=True)
 
     elif (a == 1):
@@ -175,7 +177,7 @@ if __name__ == '__main__':
         subprocess.call('echo "---------------------------------------------"' , shell=True)
         subprocess.call('echo "Deleting All-in-One Cloudformation Stack ..."',shell=True)
         delete_cloudformation_stack(ec2,client,"All-in-One",cloudformation)
-        monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
+        #monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
         subprocess.call('echo "All-in-One Cloudformation Stack Deleted Successfully !"',shell=True)
     else:
         subprocess.call('echo "Deleting All ..."' , shell=True)
@@ -191,5 +193,5 @@ if __name__ == '__main__':
         subprocess.call('echo "Deleting AMI ..."',shell=True)
         delete_key_pair(client)
         delete_ami(amiId,client,accId,ssm)
-        monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
+        #monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
         subprocess.call('echo "AMI Deleted Successfully !"',shell=True)

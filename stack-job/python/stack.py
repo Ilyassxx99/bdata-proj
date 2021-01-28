@@ -14,6 +14,23 @@ def create_cloudformation_stack(stack,file,cloudformation):
     waiter = cloudformation.get_waiter("stack_create_complete")
     waiter.wait(StackName=stack, WaiterConfig={"Delay": 15, "MaxAttempts": 300})
 
+def cloudformation_stack_exists(stack,cloudformation):
+    exists = False
+    response = cfd.list_stacks(
+    StackStatusFilter=[
+            'CREATE_COMPLETE',
+            'CREATE_IN_PROGRESS',
+            'CREATE_FAILED'
+        ]
+    )
+    stacks =[]
+    for i in range(len(response["StackSummaries"])):
+        stacks.append(response["StackSummaries"][i]["StackName"])
+    if stack in stacks:
+        exists = True
+    else:
+        exists = False
+    return exists
 
 def delete_cloudformation_stack(ec2,client,stack,cloudformation):
     controllerReserv = client.describe_instances(
