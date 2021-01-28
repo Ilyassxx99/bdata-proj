@@ -181,10 +181,6 @@ if __name__ == '__main__':
         subprocess.call('echo "All-in-One Cloudformation Stack Deleted Successfully !"',shell=True)
     else:
         subprocess.call('echo "Deleting All ..."' , shell=True)
-        param = ssm.get_parameter(
-            Name='AMI-ID',
-        )
-        amiId = param["Parameter"]["Value"]
         subprocess.call('echo "---------------------------------------------"' , shell=True)
         subprocess.call('echo "Deleting All-in-One Cloudformation Stack ..."',shell=True)
         delete_cloudformation_stack(ec2,client,"All-in-One",cloudformation)
@@ -192,6 +188,10 @@ if __name__ == '__main__':
         subprocess.call('echo "---------------------------------------------"' , shell=True)
         subprocess.call('echo "Deleting AMI ..."',shell=True)
         delete_key_pair(client)
+        param = ssm.get_parameter(
+            Name='AMI-ID',
+        )
+        amiId = param["Parameter"]["Value"]
         delete_ami(amiId,client,accId,ssm)
         #monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
         subprocess.call('echo "AMI Deleted Successfully !"',shell=True)

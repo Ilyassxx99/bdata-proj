@@ -16,7 +16,7 @@ def create_cloudformation_stack(stack,file,cloudformation):
 
 def cloudformation_stack_exists(stack,cloudformation):
     exists = False
-    response = cfd.list_stacks(
+    response = cloudformation.list_stacks(
     StackStatusFilter=[
             'CREATE_COMPLETE',
             'CREATE_IN_PROGRESS',
