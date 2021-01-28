@@ -30,6 +30,18 @@ To create the AWS stack go to :
  ./stack.sh
 ```
 it sets the environment variables and executes docker-compose.
+Then execute the following to get the key-pair used for SSH to the cluster:
+```
+ ./key-1.sh
+```
+Open a new terminal, go to scripts folder and execute :
+```
+ ./key-2.sh
+```
+Then get the Controller Ip address from the output of ./stack.sh and execute :
+```
+ ./ssh.sh <Ip @ of Controller>
+```
 ### Delete Stack
 
 To delete the AWS stack go to :
