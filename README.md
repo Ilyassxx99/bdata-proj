@@ -28,7 +28,8 @@ it sets the environment variables and executes docker-compose.
 ### Delete Stack
 
 To delete the AWS stack go to :
-```./delete.sh
+```
+ ./delete.sh
 ```
 
 ### Run Spark job
