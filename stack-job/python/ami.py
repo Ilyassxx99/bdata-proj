@@ -111,7 +111,7 @@ def setup_instance(instanceIp):
     sudo chown ubuntu:ubuntu /etc/exports')
     lines = stdout.readlines()
     ssh_client.close()
-def create_ami(instanceId,ec2,client):
+def create_ami(instanceId,ec2,client,ssm):
     print("Creating AMI ...")
     instance = ec2.Instance(instanceId)
     ami = instance.create_image(
@@ -151,7 +151,7 @@ def delete_ec2_instance(instanceId,client):
     )
     print(instanceId + " terminated !")
 
-def delete_ami(amiId,amiName,client,accId):
+def delete_ami(amiId,amiName,client,accId,ssm):
 #  ownerId = sts.get_caller_identity().get('Account')
     response = client.deregister_image(
     ImageId=amiId,
