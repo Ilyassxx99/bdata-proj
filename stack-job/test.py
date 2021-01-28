@@ -3,9 +3,7 @@ import boto3
 from botocore.config import Config
 
 
-ACCESS_KEY = "AKIATJB6EADHVJQCUVFJ"
-SECRET_KEY = "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"
-REGION = "eu-west-3"
+
 
 my_config = Config(
     region_name = REGION,
