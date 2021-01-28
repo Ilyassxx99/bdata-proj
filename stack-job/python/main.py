@@ -121,8 +121,6 @@ if __name__ == '__main__':
             subprocess.call('echo "AMI doesnt exist, creating AMI ..."',shell=True)
             subprocess.call('echo "-------------------------"',shell=True)
             subprocess.call('echo "Creating VPC-AMI Cloudformation Stack ..."',shell=True)
-            if cloudformation_stack_exists("VPC-AMI",cloudformation):
-                delete_cloudformation_stack(ec2,client,"VPC-AMI",cloudformation)
             create_cloudformation_stack("VPC-AMI","vpc.yaml",cloudformation)
             securityGroup,securityGroupSsh,subnetId = get_stack_network_info("VPC-AMI",cloudformation)
             create_key_pair(client)
