@@ -127,6 +127,12 @@ def create_ami(instanceId,ec2,client):
             amiId,
         ],
     )
+    response = ssm.put_parameter(
+        Name='AMI-ID',
+        Value=amiId,
+        Type='String',
+        Overwrite=True,
+    )
     print(amiName + " created successfully ")
     return (amiId, amiName)
 
@@ -160,6 +166,9 @@ def delete_ami(amiId,amiName,client,accId):
                 ]
             },
         ],
+    )
+    deleteAmi = ssm.delete_parameter(
+        Name='AMI-ID'
     )
     snaps = snapDescribe['Snapshots']
     for snap in snaps:

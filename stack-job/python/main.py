@@ -88,6 +88,11 @@ if __name__ == '__main__':
     aws_secret_access_key=SECRET_KEY,
     config=my_config
     )
+    ssm = boto3.client('ssm',
+        aws_access_key_id=ACCESS_KEY,
+        aws_secret_access_key=SECRET_KEY,
+        config=my_config
+    )
     s3Res = boto3.resource('s3',
     aws_access_key_id=ACCESS_KEY,
     aws_secret_access_key=SECRET_KEY,
@@ -119,7 +124,7 @@ if __name__ == '__main__':
             create_key_pair(client)
             instanceIp,instanceId = create_ec2_instance(securityGroup,securityGroupSsh,subnetId,client,ec2)
             setup_instance(instanceIp)
-            amiId,amiName = create_ami(instanceId,ec2,client)
+            amiId,amiName = create_ami(instanceId,ec2,client,ssm)
             print("-----------AMI-----------")
             print(amiId)
             print("-------------------------")
@@ -132,8 +137,9 @@ if __name__ == '__main__':
             monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
         else :
             print("Image exists, creating cluster ...")
-            amiId = amis[0]["ImageId"]
-            amiName = amis[0]["Name"]
+            amiId = ssm.get_parameter(
+                Name='AMI-ID',
+            )
             os.environ['AMI_ID'] = amiId
             create_key_pair(client)
             subprocess.call("sed -i 's/myami/'$AMI_ID'/' stackTemp.yaml", shell=True)
@@ -153,5 +159,5 @@ if __name__ == '__main__':
         amiName = amis[0]["Name"]
         delete_cloudformation_stack(ec2,client,"All-in-One",cloudformation)
         delete_key_pair(client)
-        delete_ami(amiId,amiName,client,accId)
+        delete_ami(amiId,amiName,client,accId,ssm)
         monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
