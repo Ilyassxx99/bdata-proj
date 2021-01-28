@@ -25,8 +25,8 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
     # Get controllers and workers informations
     controllers = client.describe_instances(Filters=[{'Name': 'tag:Type', 'Values': ['Controller']},{'Name': 'instance-state-name', 'Values': ['running']}])
     workers = client.describe_instances(Filters=[{'Name': 'tag:Type', 'Values': ['Worker']},{'Name': 'instance-state-name', 'Values': ['running']}])
-
-
+    subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
+    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     for reservation in controllers["Reservations"]:
         for instance in reservation["Instances"]:
             controllersIp.append(instance["PublicIpAddress"]) # Get controller Ip address
@@ -50,7 +50,7 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             'Value': True
             })
             ssh_client.connect(hostname=instance["PublicIpAddress"], username="ubuntu", pkey=k) # Connect to controller
-            print("Initiating Kubernetes cluster ...")
+            subprocess.call('echo "Initiating Kubernetes cluster ..."',shell=True)
             # Execute command to initiate Kubernetes cluster
             cmd = 'sudo hostnamectl set-hostname master-node && \
              sudo service docker start && \
@@ -66,8 +66,8 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             stdin,stdout,stderr=ssh_client.exec_command(cmd)
             lines = stdout.readlines() # read output of command
             subprocess.call("./create-admin.sh",shell=True)
-            print("Kubernetes cluster initiated successfully !")
-            print("-------------------------------------------")
+            subprocess.call('echo -------------------------------------------',shell=True)
+            subprocess.call('echo "Kubernetes cluster initiated successfully !"',shell=True)
             # Copying files to remote controller
             sftp = ssh_client.open_sftp()
             sftp.get("/home/ubuntu/.kube/config","/root/.kube/config")
@@ -75,11 +75,10 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             stdin,stdout,stderr=ssh_client.exec_command("sudo kubeadm token create --print-join-command") # Get token used by workers to join cluster
             lines = stdout.readlines()
             ssh_client.close()
-            print(lines)
             controllersCount = controllersCount + 1
             joincmd = lines[0][:-2]
             joincmd = "sudo "+ joincmd # The join command to enter in controllers to join cluster
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
     for reservation in workers["Reservations"]:
         for instance in reservation["Instances"]:
             stdo = ""
@@ -115,13 +114,13 @@ def configure(client,ec2,autoscaling,ssh_client,cloudformation):
             #     stdo = stdo + line # Output of join command
             # print(stdo)
             workersCount = workersCount + 1
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-    print("--------------------------------")
-    print("Deploying the kubernetes objects ...")
+    subprocess.call("echo +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",shell=True)
+    subprocess.call("echo --------------------------------",shell=True)
+    subprocess.call('echo "Deploying the kubernetes objects ..."',shell=True)
     subprocess.call("kubectl apply -f /scripts/k8s",shell=True)
     subprocess.call("kubectl label nodes worker-node-0 spark=yes",shell=True)
-    print("--------------------------------")
-    print("Deploying the kube-opex-analytics ...")
+    subprocess.call("echo --------------------------------",shell=True)
+    subprocess.call('echo "Deploying the kube-opex-analytics ..."',shell=True)
     subprocess.call('helm upgrade \
                     --namespace kube-system \
                     --install kube-opex-analytics \

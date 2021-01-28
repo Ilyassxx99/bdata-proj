@@ -137,9 +137,10 @@ if __name__ == '__main__':
             monitoringCreate(s3,s3Res,lamda,cloudformation,autoscaling)
         else :
             print("Image exists, creating cluster ...")
-            amiId = ssm.get_parameter(
+            param = ssm.get_parameter(
                 Name='AMI-ID',
             )
+            amiId = param["Parameter"]["Value"]
             os.environ['AMI_ID'] = amiId
             create_key_pair(client)
             subprocess.call("sed -i 's/myami/'$AMI_ID'/' stackTemp.yaml", shell=True)
@@ -155,9 +156,10 @@ if __name__ == '__main__':
         monitoringDelete(s3,ec2,client,cloudformation,iam,sns,logs,topicArn)
     else:
         print("Deleting All ...")
-        amiId = ssm.get_parameter(
+        param = ssm.get_parameter(
             Name='AMI-ID',
         )
+        amiId = param["Parameter"]["Value"]
         delete_cloudformation_stack(ec2,client,"All-in-One",cloudformation)
         delete_key_pair(client)
         delete_ami(amiId,client,accId,ssm)
