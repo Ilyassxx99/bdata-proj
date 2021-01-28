@@ -13,11 +13,7 @@ my_config = Config(
     }
 )
 
-cfd = boto3.client('cloudformation',
-    aws_access_key_id="AKIATJB6EADH4SQKDFEV",
-    aws_secret_access_key="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",
-    config=my_config
-    )
+
 
 response = cfd.list_stacks(
 StackStatusFilter=[
